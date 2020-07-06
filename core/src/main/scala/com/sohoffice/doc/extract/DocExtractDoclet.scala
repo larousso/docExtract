@@ -1,10 +1,10 @@
 package com.sohoffice.doc.extract
 
-import java.io.{File, PrintWriter, Writer}
+import java.io.{ File, PrintWriter, Writer }
 
 import scala.reflect.internal.Reporter
 import scala.tools.nsc.doc.Universe
-import scala.tools.nsc.doc.doclet.{Generator, Universer}
+import scala.tools.nsc.doc.doclet.{ Generator, Universer }
 import scala.tools.nsc.doc.model.DocTemplateEntity
 
 class DocExtractDoclet(reporter: Reporter) extends Generator with Universer {
@@ -20,10 +20,10 @@ class DocExtractDoclet(reporter: Reporter) extends Generator with Universer {
   }
 
   /**
-    * Produce output for one entity, and recursively move on to the children.
-    *
-    * @param tpl
-    */
+   * Produce output for one entity, and recursively move on to the children.
+   *
+   * @param tpl
+   */
   def generateFor(tpl: DocTemplateEntity)(implicit writer: Writer): Unit = {
     output.generate(tpl).foreach(s => {
       writer.write(s)

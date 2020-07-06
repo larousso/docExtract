@@ -2,11 +2,11 @@ package com.sohoffice.doc.extract.sbt
 
 import sbt._
 import Keys._
-import com.sohoffice.doc.extract.BuildInfo
+import com.adelegue.doc.extract.BuildInfo
 
 object DocExtractPlugin extends AutoPlugin {
 
-  lazy val DocExtractConfig = config("docExtract") describedAs("doc-extract specific configurations")
+  lazy val DocExtractConfig = config("docExtract") describedAs ("doc-extract specific configurations")
 
   object autoImport extends DocExtractKeys
 
@@ -27,9 +27,9 @@ object DocExtractPlugin extends AutoPlugin {
         "org.scala-lang" % "scala-compiler" % scalaVersion.value % DocExtractConfig,
         "com.sohoffice" %% "doc-extract" % BuildInfo.version % DocExtractConfig),
       docExtract := {
-        val jars = (fullClasspath in(Compile, doc)).value.map(_.data).toVector ++
+        val jars = (fullClasspath in (Compile, doc)).value.map(_.data).toVector ++
           update.value.select(configurationFilter("docExtract"))
-//        val jars = (fullClasspath in(Compile, doc)).value.map(_.data).toVector
+        //        val jars = (fullClasspath in(Compile, doc)).value.map(_.data).toVector
         Keys.streams.value.log.debug(s"docExtract jars: $jars")
         val options = ForkOptions()
           .withRunJVMOptions(Vector(
@@ -40,7 +40,7 @@ object DocExtractPlugin extends AutoPlugin {
           "scala.tools.nsc.ScalaDoc",
           // "-verbose",
           // "-d", (crossTarget.value / "api").toString,
-          "-classpath", (fullClasspath in(Compile, doc)).value.map(_.data.toString).mkString(":"),
+          "-classpath", (fullClasspath in (Compile, doc)).value.map(_.data.toString).mkString(":"),
           "-doc-generator", "com.sohoffice.doc.extract.DocExtractDoclet") ++ (sources in Compile).value.map(s => s"""${s.toString}""")
 
         docExtractTargetFile.value match {
@@ -62,7 +62,6 @@ object DocExtractPlugin extends AutoPlugin {
           case filename =>
             Right(target.value / filename)
         }
-      }
-    )
+      })
   }
 }

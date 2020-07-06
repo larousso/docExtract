@@ -86,17 +86,17 @@ trait DocExtractOutput {
   def acceptParam(tpl: MemberEntity, pe: ParameterEntity): Boolean = true
 
   /**
-    * I believe values are duplicated with members, so we don't really need it.
-    */
+   * I believe values are duplicated with members, so we don't really need it.
+   */
   def acceptVal(tpl: DocTemplateEntity, v: Val): Boolean = false
 
   /**
-    * Extract document of a type
-    *
-    * @param tpl
-    * @param collector
-    * @return
-    */
+   * Extract document of a type
+   *
+   * @param tpl
+   * @param collector
+   * @return
+   */
   def entry(tpl: DocTemplateEntity)(implicit collector: Formatter): Option[String] = {
     val typeComment = commentToText(tpl.comment).trim
     if (typeComment.nonEmpty && acceptType(tpl)) {
@@ -107,13 +107,13 @@ trait DocExtractOutput {
   }
 
   /**
-    * Extract document of a type member
-    *
-    * @param tpl
-    * @param member
-    * @param collector
-    * @return
-    */
+   * Extract document of a type member
+   *
+   * @param tpl
+   * @param member
+   * @param collector
+   * @return
+   */
   def entry(tpl: DocTemplateEntity, member: MemberEntity)(implicit collector: Formatter): Option[String] = {
     if (member.isConstructor) {
       println(member.comment)
@@ -133,13 +133,13 @@ trait DocExtractOutput {
   }
 
   /**
-    * Extract document of a class parameter or case class value
-    *
-    * @param tpl
-    * @param v
-    * @param collector
-    * @return
-    */
+   * Extract document of a class parameter or case class value
+   *
+   * @param tpl
+   * @param v
+   * @param collector
+   * @return
+   */
   def entry(tpl: MemberEntity, v: ParameterEntity)(implicit collector: Formatter): Option[String] = {
     val opt = tpl.comment flatMap { comment =>
       v match {
@@ -172,24 +172,24 @@ trait DocExtractOutput {
 object DocExtractOutput {
 
   /**
-    * A default implementation that outputs everything
-    */
+   * A default implementation that outputs everything
+   */
   lazy val ALL = new DocExtractOutput {}
 
   /**
-    * Format the documentable element into a string
-    * The result will be passed to Writer to serialize
-    */
+   * Format the documentable element into a string
+   * The result will be passed to Writer to serialize
+   */
   trait Formatter {
     /**
-      * Do collect
-      */
+     * Do collect
+     */
     def collect(className: String, element: String, comment: String): String
   }
 
   class JavaResourceFileFormatter extends Formatter {
     override def collect(baseName: String, element: String, comment: String): String = {
-      val commentPart = comment.lines.map(_.trim).mkString("\\n\\\n")
+      val commentPart = comment.linesIterator.map(_.trim).mkString("\\n\\\n")
       if (element == null || element.isEmpty) {
         s"$baseName = $commentPart"
       } else {
